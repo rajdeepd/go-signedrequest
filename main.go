@@ -57,6 +57,7 @@ func main() {
 		//passwordValue := c.PostForm("password");
 		log.Printf("%v","Inside /signedrequest POST") // ""
 		signedRequest := c.PostForm("signed_request")
+		log.Printf("%v",signedRequest)
 		c.HTML(http.StatusOK, "result_sr.tmpl.html",
 			gin.H{
 				"signed_request": signedRequest,
