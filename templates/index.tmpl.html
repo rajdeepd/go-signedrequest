@@ -1,0 +1,38 @@
+<html>
+  {{template "header.tmpl.html"}}
+<body>
+  {{template "nav.tmpl.html"}}
+  {{template "bodyheader.tmpl.html"}}
+<!--<div class="jumbotron text-center">
+  <div class="container">
+    <a href="/" class="lang-logo">
+      <img src="/static/lang-logo.png">
+    </a>
+    <h3>Go Gin webframework</h3>
+      <p>This is a sample Go application.</p>  </div>
+</div>-->
+<div class="container">
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <h3><span class="glyphicon glyphicon-info-sign"></span> Please send the following Request: </h3>
+      <form action="/login" method="post" name="loginForm">
+        <div>
+          <input type="text" placeholder="Email" name="email"></input>
+        </div>
+        <br /><br />
+        <div>
+          <input type="password" placeholder="Password" name="password"></input>
+        </div>
+        <br /><br />
+        <input type="submit"></input>
+        <br /><br />
+      </form>
+    </div>
+  </div> <!-- row -->
+    <div class="alert alert-info text-center" role="alert">
+
+  </div>
+</div>
+</body>
+</html>

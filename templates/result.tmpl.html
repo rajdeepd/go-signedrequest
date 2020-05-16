@@ -1,0 +1,19 @@
+<html>
+  {{template "header.tmpl.html"}}
+<body>
+  {{template "nav.tmpl.html"}}
+  {{template "bodyheader.tmpl.html"}}
+<div class="container">
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <p>Received following response</p>
+      <p>{{.email}} {{.password}}</p>
+    </div>
+  </div> <!-- row -->
+    <div class="alert alert-info text-center" role="alert">
+
+  </div>
+</div>
+</body>
+</html>
