@@ -25,6 +25,10 @@ func main() {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
 	})
 
+	router.GET("/signedrequest", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl.html", nil)
+	})
+
 	router.POST("/api", handleVerification)
 
 	router.POST("/login", func(c *gin.Context) {
