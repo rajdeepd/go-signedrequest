@@ -27,7 +27,7 @@ func main() {
 
 	router.GET("/signedrequest", func(c *gin.Context) {
 		log.Printf("%v","Inside /signedrequest GET")
-		c.HTML(http.StatusOK, "index.tmpl.html", nil)
+		c.HTML(http.StatusOK, "signed_request_get.tmpl.html", nil)
 	})
 
 	router.POST("/api", handleVerification)
