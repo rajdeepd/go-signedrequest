@@ -26,6 +26,7 @@ func main() {
 	})
 
 	router.GET("/signedrequest", func(c *gin.Context) {
+		log.Printf("%v","Inside /signedrequest GET")
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
 	})
 
@@ -54,6 +55,7 @@ func main() {
 		//formContent := c.PostForm("loginForm")
 		//emailValue := c.PostForm("email")
 		//passwordValue := c.PostForm("password");
+		log.Printf("%v","Inside /signedrequest POST") // ""
 		signedRequest := c.PostForm("signed_request")
 		c.HTML(http.StatusOK, "result_sr.tmpl.html",
 			gin.H{
