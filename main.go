@@ -63,9 +63,10 @@ func main() {
 		jsonEnvelope, _ := base64.StdEncoding.DecodeString(encodedEnvelope)
 		log.Printf("base64: %s\n", jsonEnvelope)
 		signedRequestStruct := SignedRequestStruct{}
+
+		json.Unmarshal([]byte(jsonEnvelope), &signedRequestStruct)
 		algo := signedRequestStruct.Algorithm
 		oauthToken :=  signedRequestStruct.Client.OauthToken
-		json.Unmarshal([]byte(jsonEnvelope), &signedRequestStruct)
 		log.Printf("Algorithm:" + algo)
 		log.Printf("OAuth Token:" + oauthToken)
 		c.HTML(http.StatusOK, "result_sr.tmpl.html",
