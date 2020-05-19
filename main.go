@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/base64"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
@@ -42,32 +45,35 @@ func main() {
 				"email": emailValue,
 				"password":passwordValue,
 			})
-		/*
-		c.JSON(200, gin.H{
-			"status":  "posted to login",
-			"message": "whoo",
-			"email": emailValue,
-		    "password": passwordValue})*/
 	})
 
 	router.POST("/signedrequest", func(c *gin.Context) {
-		//What do I need to put here?
-		//formContent := c.PostForm("loginForm")
-		//emailValue := c.PostForm("email")
-		//passwordValue := c.PostForm("password");
+
 		log.Printf("%v","Inside /signedrequest POST") // ""
 		signedRequest := c.PostForm("signed_request")
 		log.Printf("%v",signedRequest)
+		splitSR := strings.Split(signedRequest, ".")
+		encodedSig := splitSR[0]
+
+		encodedEnvelope := splitSR[1]
+
+		log.Printf("%v","Encoded Signature:" + encodedSig)
+		log.Printf("%v","Encoded Envelope:" + splitSR[1])
+
+		jsonEnvelope, _ := base64.StdEncoding.DecodeString(encodedEnvelope)
+		log.Printf("base64: %s\n", jsonEnvelope)
+		signedRequestStruct := SignedRequestStruct{}
+		algo := signedRequestStruct.Algorithm
+		oauthToken :=  signedRequestStruct.Client.OauthToken
+		json.Unmarshal([]byte(jsonEnvelope), &signedRequestStruct)
+		log.Printf("Algorithm:" + algo)
+		log.Printf("OAuth Token:" + oauthToken)
 		c.HTML(http.StatusOK, "result_sr.tmpl.html",
 			gin.H{
-				"signed_request": signedRequest,
+				//"signed_request": signedRequest,
+			    "algo": algo,
+			    "oauth_token" : oauthToken,
 			})
-		/*
-			c.JSON(200, gin.H{
-				"status":  "posted to login",
-				"message": "whoo",
-				"email": emailValue,
-			    "password": passwordValue})*/
 	})
 	router.Run(":" + port)
 }
