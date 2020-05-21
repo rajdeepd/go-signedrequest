@@ -1,8 +1,11 @@
 package main
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -14,6 +17,7 @@ import (
 
 func main() {
 	port := os.Getenv("PORT")
+	secret := os.Getenv("SECRET")
 
 	if port == "" {
 		log.Fatal("$PORT must be set")
@@ -36,8 +40,6 @@ func main() {
 	router.POST("/api", handleVerification)
 
 	router.POST("/login", func(c *gin.Context) {
-		//What do I need to put here?
-		//formContent := c.PostForm("loginForm")
 		emailValue := c.PostForm("email");
 		passwordValue := c.PostForm("password");
 		c.HTML(http.StatusOK, "result.tmpl.html",
@@ -60,8 +62,11 @@ func main() {
 		log.Printf("%v","Encoded Signature:" + encodedSig)
 		log.Printf("%v","Encoded Envelope:" + splitSR[1])
 
+		validDigest := validateDigest(secret, encodedSig, encodedEnvelope)
+
 		jsonEnvelope, _ := base64.StdEncoding.DecodeString(encodedEnvelope)
 		log.Printf("base64: %s\n", jsonEnvelope)
+		log.Printf("Valid Digest: %s\n", validDigest)
 		signedRequestStruct := SignedRequestStruct{}
 
 		json.Unmarshal([]byte(jsonEnvelope), &signedRequestStruct)
@@ -74,10 +79,23 @@ func main() {
 				//"signed_request": signedRequest,
 			    "algo": algo,
 			    "oauth_token" : oauthToken,
+			    "valid_digest" : validDigest,
 			})
 	})
 	router.Run(":" + port)
 }
+
+func validateDigest(secret string, encodedSign string, encodedEnvelope string) bool {
+	h := hmac.New(sha256.New, []byte(secret))
+	// Write Data to it
+	h.Write([]byte(encodedEnvelope))
+	fmt.Println(len([]byte(encodedEnvelope)))
+
+	sha := base64.StdEncoding.EncodeToString(h.Sum(nil))
+	return sha == encodedSign
+
+}
+
 func handleVerification(c *gin.Context) {
 	if c.Request.Method == "POST" {
 
