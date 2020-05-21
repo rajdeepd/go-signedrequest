@@ -18,6 +18,8 @@ import (
 func main() {
 	port := os.Getenv("PORT")
 	secret := os.Getenv("SECRET")
+	log.Println("SECRET: " + secret)
+
 
 	if port == "" {
 		log.Fatal("$PORT must be set")
