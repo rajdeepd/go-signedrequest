@@ -92,6 +92,8 @@ func validateDigest(secret string, encodedSign string, encodedEnvelope string) b
 	fmt.Println(len([]byte(encodedEnvelope)))
 
 	sha := base64.StdEncoding.EncodeToString(h.Sum(nil))
+	log.Printf("Expected signature:", encodedSign)
+	log.Printf("Generated signature:", sha)
 	return sha == encodedSign
 
 }
